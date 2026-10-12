@@ -163,8 +163,46 @@ def save_model(bundle, path):
     return path, sidecar
 
 
+_REQUIRED_BUNDLE_KEYS = ("classifier", "scaler", "classes", "feature_config")
+
+
+def _upgrade_real_bundle(bundle):
+    """Normalise a ``training/train_real.py`` bundle to the canonical schema.
+
+    The research training pipeline stores the same core artefacts (scaler,
+    classifier, classes, feature config) under different keys and without a
+    ``format_version``. Filling in the canonical fields lets the saved model be
+    loaded by the normal inference code without retraining or rewriting the
+    file.
+    """
+
+    upgraded = dict(bundle)
+    upgraded["format_version"] = MODEL_FORMAT_VERSION
+
+    counts = (bundle.get("splits") or {}).get("counts") or {}
+    real_metrics = bundle.get("metrics_test") or {}
+
+    upgraded.setdefault("model_type", bundle.get("best_model") or "texurion-real")
+    upgraded.setdefault("n_samples", counts.get("train"))
+
+    metrics = dict(bundle.get("metrics") or {})
+    metrics.setdefault("test_accuracy", real_metrics.get("accuracy"))
+    metrics.setdefault("test_samples", counts.get("test"))
+    metrics.setdefault("train_accuracy", None)
+    metrics.setdefault("test_size", None)
+    upgraded["metrics"] = metrics
+
+    upgraded.setdefault("confusion_labels", list(bundle.get("classes", [])))
+    return upgraded
+
+
 def load_model(path):
-    """Load a model bundle, validating its structure and age."""
+    """Load a model bundle, validating its structure and version.
+
+    Accepts both the canonical bundle written by :func:`train_model` and the
+    real-dataset bundle written by ``training/train_real.py`` (which predates
+    the ``format_version`` field), normalising the latter in memory.
+    """
 
     try:
         import joblib
@@ -178,11 +216,14 @@ def load_model(path):
 
     if not isinstance(bundle, dict):
         raise ValueError(f"Model at {path} has an unknown format.")
-    if bundle.get("format_version") != MODEL_FORMAT_VERSION:
+
+    version = bundle.get("format_version")
+    if version is not None and version != MODEL_FORMAT_VERSION:
         raise ValueError(
             f"Unsupported model format version "
-            f"{bundle.get('format_version')} (expected {MODEL_FORMAT_VERSION}).")
-    required = ("classifier", "scaler", "classes", "feature_config")
+            f"{version} (expected {MODEL_FORMAT_VERSION}).")
+
+    required = _REQUIRED_BUNDLE_KEYS
     missing = [k for k in required if k not in bundle]
     if missing:
         raise ValueError(f"Model is missing fields: {missing}")
@@ -190,6 +231,9 @@ def load_model(path):
     classes = list(bundle["classes"])
     if len(classes) < 2:
         raise ValueError("Model must have at least two classes.")
+
+    if version != MODEL_FORMAT_VERSION:
+        bundle = _upgrade_real_bundle(bundle)
 
     return bundle
 

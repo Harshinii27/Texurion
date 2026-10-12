@@ -26,3 +26,14 @@ database/
 *.fdb_latexmk
 *.bbl
 *.blg
+venv314/
+__pycache__/
+*.py[cod]
+.env
+.streamlit/secrets.toml
+dtd-r1.0.1/
+dtd-r1.0.1.zip
+texurion_launch/
+texurion_launch.zip
+texurion_real_model.zip
+texurion_separate.zip

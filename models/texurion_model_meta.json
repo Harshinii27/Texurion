@@ -1,0 +1,71 @@
+{
+  "model_path": "models\\texurion_model.pkl",
+  "model_version": "texurion-1.0",
+  "trained_at": "2026-10-12T18:17:58",
+  "classes": [
+    "banded",
+    "dotted",
+    "woven"
+  ],
+  "feature_config": {
+    "method": "uniform",
+    "engine": "skimage",
+    "lbp_scales": [
+      [
+        1,
+        8
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        24
+      ]
+    ],
+    "include_gabor": true,
+    "gabor_frequencies": [
+      0.1,
+      0.25,
+      0.4
+    ],
+    "gabor_orientations": [
+      0.0,
+      0.7853981633974483,
+      1.5707963267948966,
+      2.356194490192345
+    ],
+    "include_color_opponent": false,
+    "max_side": 512,
+    "descriptor_length": 78
+  },
+  "splits": {
+    "train": {
+      "banded": 84,
+      "dotted": 84,
+      "woven": 84
+    },
+    "val": {
+      "banded": 18,
+      "dotted": 18,
+      "woven": 18
+    },
+    "test": {
+      "banded": 18,
+      "dotted": 18,
+      "woven": 18
+    },
+    "counts": {
+      "train": 252,
+      "val": 54,
+      "test": 54
+    }
+  },
+  "metrics_test": {
+    "accuracy": 0.8703703703703703,
+    "precision_weighted": 0.873611111111111,
+    "recall_weighted": 0.8703703703703703,
+    "f1_weighted": 0.8701410388716889
+  }
+}

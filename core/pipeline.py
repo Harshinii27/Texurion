@@ -98,10 +98,12 @@ class FeatureConfig:
     def descriptor_length(self, color_channels=1):
         """Total length of the fused feature vector produced by this config."""
 
-        n_lbp_pairs = 3 if self.include_color_opponent else 1
+        # One grayscale histogram plus three opponent-colour histograms
+        # (RG, RB, GB) when the opponent block is enabled.
+        n_histograms = 4 if self.include_color_opponent else 1
         lbp_len = (
             sum(number_of_patterns(self.method, p) for _r, p in self.lbp_scales)
-            * n_lbp_pairs
+            * n_histograms
         )
         gabor_len = self.gabor_descriptor_length() if self.include_gabor else 0
         return int(lbp_len + gabor_len)

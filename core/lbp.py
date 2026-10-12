@@ -106,12 +106,52 @@ def generate_lbp(path=None, radius=3, points=None, method="uniform", gray=None):
 
 
 def number_of_patterns(method, points):
-    """Return the number of histogram bins for an LBP method."""
+    """Return the number of histogram bins for an LBP method.
+
+    The counts match the label domains produced by scikit-image's
+    ``local_binary_pattern``:
+
+    * ``uniform``     -> ``P + 2`` labels (0..P plus the non-uniform bucket).
+    * ``nri_uniform`` -> ``P * (P - 1) + 3`` labels.
+    * ``ror`` / ``default`` -> ``min(2**P, 256)`` bins spanning ``[0, 2**P)``.
+    * ``var``         -> a fixed 256-bin histogram (continuous response).
+
+    Keeping a fixed, method-dependent bin count means the descriptor length
+    stays independent of the image content.
+    """
 
     points = int(points)
-    if method in ("uniform", "nri_uniform", "ror"):
+    if method == "uniform":
         return points + 2
+    if method == "nri_uniform":
+        return points * (points - 1) + 3
+    # 'ror', 'default' and any unknown label method: bounded label domain.
     return min(int(2 ** min(points, 8)), 256)
+
+
+def _lbp_histogram_range(method, points, bins, lbp):
+    """Return the ``(lo, hi)`` histogram range for an LBP map.
+
+    ``uniform``/``nri_uniform`` labels densely cover ``[0, bins)``. ``ror``
+    and ``default`` produce integer codes in ``[0, 2**P)`` (sparse), so the
+    range must span the whole code domain even though only ``bins`` bins are
+    used. ``var`` is a continuous response, so its range follows the data.
+    """
+
+    if method in ("uniform", "nri_uniform", "ror", "default"):
+        # ror/default keep a fixed bin count but must span the full code domain.
+        if method in ("ror", "default"):
+            return (0, int(2 ** int(points)))
+        return (0, bins)
+
+    if method == "var":
+        lo = float(np.nanmin(lbp))
+        hi = float(np.nanmax(lbp))
+        if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+            return (0.0, 1.0)
+        return (lo, hi)
+
+    return (0, max(bins, 1))
 
 
 def lbp_visualize(lbp, max_side=None):
@@ -355,7 +395,8 @@ def lbp_multiscale_histograms(
             lbp = local_binary_pattern(gray, points, radius, method=method)
         else:
             lbp = LBP_ENGINES[engine](gray, radius, points, method=method)
-        hist = np.histogram(lbp.ravel(), bins=bins, range=(0, bins))[0]
+        hist_range = _lbp_histogram_range(method, points, bins, lbp)
+        hist = np.histogram(lbp.ravel(), bins=bins, range=hist_range)[0]
         hist = hist.astype("float64")
         total = hist.sum()
         if total > 0:

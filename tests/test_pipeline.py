@@ -40,6 +40,7 @@ def test_feature_vector_colour_opponent_block(tiny_checker):
     plain = extract_features(tiny_checker, before)
     lbp_len = plain["vector"].size
     assert extended["vector"].size == lbp_len + 3 * lbp_len  # RG, RB, GB pairs
+    assert cfg.descriptor_length() == extended["vector"].size
     assert "color_opponent" in extended["blocks"]
 
 

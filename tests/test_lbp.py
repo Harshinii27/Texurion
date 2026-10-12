@@ -80,9 +80,26 @@ def test_custom_engine_rejects_unimplemented_method():
 
 def test_number_of_patterns_rules():
     assert number_of_patterns("uniform", 8) == 10
-    assert number_of_patterns("nri_uniform", 16) == 18
+    assert number_of_patterns("uniform", 24) == 26
+    # nri_uniform densely labels 0..P*(P-1)+2 -> P*(P-1)+3 bins.
+    assert number_of_patterns("nri_uniform", 8) == 59
+    assert number_of_patterns("nri_uniform", 16) == 243
     assert number_of_patterns("default", 8) == 256
     assert number_of_patterns("default", 3) == 8
+    assert number_of_patterns("ror", 8) == 256
+    assert number_of_patterns("var", 16) == 256
+
+
+@pytest.mark.parametrize("method", ["uniform", "nri_uniform", "ror", "default", "var"])
+def test_multiscale_histogram_is_non_degenerate(method):
+    # Every supported method must yield a normalised, non-empty histogram
+    # (the code/response must fall inside the chosen histogram range).
+    from core.lbp import lbp_multiscale_histograms
+
+    gray = _random_gray(7, 48, 48)
+    hist = lbp_multiscale_histograms(gray, [(3, 16)], method=method)
+    assert hist.ndim == 1 and hist.size == number_of_patterns(method, 16)
+    assert pytest.approx(float(hist.sum()), abs=1e-6) == 1.0
 
 
 def test_methods_exist():

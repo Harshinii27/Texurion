@@ -1,0 +1,99 @@
+{
+  "format_version": 1,
+  "model_type": "sklearn-svm-rbf",
+  "classes": [
+    "banded",
+    "blotchy",
+    "braided",
+    "bubbly",
+    "bumpy",
+    "chequered",
+    "cobwebbed",
+    "cracked",
+    "crosshatched",
+    "crystalline",
+    "dotted",
+    "fibrous",
+    "flecked",
+    "freckled",
+    "frilly",
+    "gauzy",
+    "grid",
+    "grooved",
+    "honeycombed",
+    "interlaced",
+    "knitted",
+    "lacelike",
+    "lined",
+    "marbled",
+    "matted",
+    "meshed",
+    "paisley",
+    "perforated",
+    "pitted",
+    "pleated",
+    "polka-dotted",
+    "porous",
+    "potholed",
+    "scaly",
+    "smeared",
+    "spiralled",
+    "sprinkled",
+    "stained",
+    "stratified",
+    "striped",
+    "studded",
+    "swirly",
+    "veined",
+    "waffled",
+    "woven",
+    "wrinkled",
+    "zigzagged"
+  ],
+  "feature_length": 216,
+  "n_samples": 1880,
+  "trained_at": "2026-10-12T21:56:42",
+  "metrics": {
+    "train_accuracy": 0.8547872340425532,
+    "val_accuracy": 0.3069148936170213,
+    "test_accuracy": 0.2835106382978723,
+    "test_f1_weighted": 0.27857433095315703,
+    "test_samples": 1880,
+    "train_samples": 1880,
+    "val_samples": 1880,
+    "n_classes": 47
+  },
+  "feature_config": {
+    "method": "uniform",
+    "engine": "skimage",
+    "lbp_scales": [
+      [
+        1,
+        8
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        24
+      ]
+    ],
+    "include_gabor": false,
+    "gabor_frequencies": [
+      0.1,
+      0.25,
+      0.4
+    ],
+    "gabor_orientations": [
+      0.0,
+      0.7853981633974483,
+      1.5707963267948966,
+      2.356194490192345
+    ],
+    "include_color_opponent": true,
+    "max_side": 256,
+    "descriptor_length": 216
+  }
+}
