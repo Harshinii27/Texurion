@@ -1,6 +1,9 @@
 streamlit==1.65.0
 numpy==2.5.4
-opencv-python==5.0.0.93
+# Headless build: the Streamlit Community Cloud container has no libGL/GTK,
+# so the GUI build (opencv-python) fails to import cv2. The headless build is
+# API-compatible for all image processing used here (no cv2 GUI calls).
+opencv-python-headless==5.0.0.93
 scikit-image==0.26.0
 scipy==1.18.1
 matplotlib==3.11.2
@@ -10,6 +13,7 @@ reportlab==5.0.1
 scikit-learn==1.9.1
 joblib==1.6.0
 numba==0.68.0
-# customtkinter (desktop GUI, python gui.py) is optional and installed
-# separately if needed:
-customtkinter==6.0.0
+# customtkinter is only used by the optional desktop GUI (python gui.py) and
+# is intentionally NOT declared here so the cloud app does not install a
+# tkinter-based toolkit. Install it separately for local desktop use:
+# customtkinter==6.0.0
