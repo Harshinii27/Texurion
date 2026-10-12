@@ -1,0 +1,84 @@
+{
+  "image_size": [
+    256,
+    171
+  ],
+  "reps": 3,
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+    "cpu_count": 8,
+    "python": "3.14.7",
+    "numpy": "2.5.4",
+    "opencv": "5.0.0",
+    "scikit-image": "0.26.0",
+    "scipy": "1.18.1",
+    "numba": "0.68.0"
+  },
+  "timings": {
+    "skimage LBP (R3 P24)": {
+      "median_ms": 59.48950001038611,
+      "mean_ms": 80.60136666366209,
+      "std_ms": 44.888738650585545,
+      "min_ms": 39.309300016611814,
+      "max_ms": 143.00529996398836
+    },
+    "custom NumPy LBP (R3 P24)": {
+      "median_ms": 152.59579999838024,
+      "mean_ms": 158.40446667668098,
+      "std_ms": 16.401832408824436,
+      "min_ms": 141.8608000385575,
+      "max_ms": 180.75679999310523
+    },
+    "custom Numba LBP (R3 P24)": {
+      "median_ms": 48.59849996864796,
+      "mean_ms": 54.62099999810258,
+      "std_ms": 8.859610832190292,
+      "min_ms": 48.117200029082596,
+      "max_ms": 67.1472999965772
+    },
+    "custom Python LBP (64px)": {
+      "median_ms": 533.0081499996595,
+      "mean_ms": 533.0081499996595,
+      "std_ms": 21.08224999392405,
+      "min_ms": 511.92590000573546,
+      "max_ms": 554.0903999935836
+    },
+    "Gabor bank (4x3)": {
+      "median_ms": 39.92740000830963,
+      "mean_ms": 37.05710001910726,
+      "std_ms": 4.399151466923399,
+      "min_ms": 30.841800034977496,
+      "max_ms": 40.40210001403466
+    },
+    "Multiscale LBP block": {
+      "median_ms": 79.38150002155453,
+      "mean_ms": 83.93396669998765,
+      "std_ms": 9.164831431660986,
+      "min_ms": 75.70080005098134,
+      "max_ms": 96.71960002742708
+    },
+    "Fused pipeline (LBP+Gabor+Opponent)": {
+      "median_ms": 2002.2069999831729,
+      "mean_ms": 2318.3844666540003,
+      "std_ms": 564.1264928882473,
+      "min_ms": 1842.1374000026844,
+      "max_ms": 3110.8089999761432
+    }
+  },
+  "memory": {
+    "baseline_rss_mb": 447.35546875,
+    "trailing_rss_mb": 447.35546875,
+    "peak_rss_mb": 447.35546875,
+    "method": "process working set (Windows)"
+  },
+  "equivalence": {
+    "equal": true,
+    "diff_count": 0,
+    "shape": [
+      171,
+      256
+    ]
+  }
+}

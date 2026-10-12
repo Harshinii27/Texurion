@@ -1,0 +1,28 @@
+# Virtual environments
+venv/
+venv314/
+
+# Python caches / bytecode
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Numba JIT caches
+*.nbi
+*.nbc
+
+# Generated outputs
+outputs/
+reports/
+database/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg

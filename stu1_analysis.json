@@ -1,0 +1,56 @@
+{
+  "source": "stu1.jpg",
+  "config": {
+    "method": "var",
+    "engine": "skimage",
+    "lbp_scales": [
+      [
+        1,
+        8
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        24
+      ]
+    ],
+    "include_gabor": true,
+    "gabor_frequencies": [
+      0.1,
+      0.25,
+      0.4
+    ],
+    "gabor_orientations": [
+      0.0,
+      0.7853981633974483,
+      1.5707963267948966,
+      2.356194490192345
+    ],
+    "include_color_opponent": true,
+    "max_side": 1024,
+    "descriptor_length": 2328
+  },
+  "roi": [
+    0,
+    0,
+    1024,
+    682
+  ],
+  "roi_pixels": 698368,
+  "metrics": {
+    "Contrast": 1.7113622003146793,
+    "Dissimilarity": 0.4049066684441044,
+    "Homogeneity": 0.8796986558641515,
+    "Energy": 0.30224211687726443,
+    "Correlation": 0.9679689656815996,
+    "ASM": 0.09135592129859085,
+    "Entropy": 4.065663465581166,
+    "Uniformity": 0.19841223507005532,
+    "Mean": 273.15334202552083,
+    "Std Dev": 212.41436742175333
+  },
+  "vector_length": 3096
+}
